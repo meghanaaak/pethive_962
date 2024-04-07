@@ -1,0 +1,17 @@
+
+
+.hero {
+    height: 700px;
+    background-image: url("../assets/main banner 3.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative; /* Add position relative to .hero for positioning pseudo-element */
+}
+
+
+@media(max-width: 500px){
+    .hero{
+        height: 500px;
+    }
+}
