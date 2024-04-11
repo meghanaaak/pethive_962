@@ -1,81 +1,119 @@
-import User from "../model/usermodel.js"
-import bcrypt from "bcryptjs"
-import generateTokenAndSetCookie from "../utils/generateToken.js";
+const mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
 
-export const signup = async (req, res) => {
-	try {
-		const { fullName, username, email, password , confirmPassword} = req.body;
+const Users = mongoose.model('Users', {
+    username: String,
+    mobile: String,
+    email: String,
+    password: String,
+    likedProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Products' }]
+});
 
-		if (password !== confirmPassword) {
-			return res.status(400).json({ error: "Passwords don't match" });
-		}
+module.exports.likeProducts = (req, res) => {
+    let productId = req.body.productId;
+    let userId = req.body.userId;
 
-		const user = await User.findOne({ username });
+    Users.updateOne({ _id: userId }, { $addToSet: { likedProducts: productId } })
+        .then(() => {
+            res.send({ message: 'liked success.' })
+        })
+        .catch(() => {
+            res.send({ message: 'server err' })
+        })
 
-		// HASH PASSWORD HERE
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(password, salt);
-        
-            const newUser = new User({
-                fullName,
-                username,
-                email,
-                password : hashedPassword,
-            });
-            
-    
-            if (newUser) {
-                // Generate JWT token here
-                generateTokenAndSetCookie(newUser._id, res);
-            await newUser.save();
-    
-                res.status(201).json({
-                    _id: newUser._id,
-                    fullName: newUser.fullName,
-                    username: newUser.username,
-                    email: newUser.email
-                });
+}
+
+module.exports.signup = (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const email = req.body.email;
+    const mobile = req.body.mobile;
+    const user = new Users({ username: username, password: password, email, mobile });
+    user.save()
+        .then(() => {
+            res.send({ message: 'saved success.' })
+        })
+        .catch(() => {
+            res.send({ message: 'server err' })
+        })
+
+}
+
+module.exports.myProfileById = (req, res) => {
+    let uid = req.params.userId
+
+    Users.findOne({ _id: uid })
+        .then((result) => {
+            res.send({
+                message: 'success.', user: {
+                    email: result.email,
+                    mobile: result.mobile,
+                    username: result.username
+                }
+            })
+        })
+        .catch(() => {
+            res.send({ message: 'server err' })
+        })
+
+    return;
+
+}
+
+module.exports.getUserById = (req, res) => {
+    const _userId = req.params.uId;
+    Users.findOne({ _id: _userId })
+        .then((result) => {
+            res.send({
+                message: 'success.', user: {
+                    email: result.email,
+                    mobile: result.mobile,
+                    username: result.username
+                }
+            })
+        })
+        .catch(() => {
+            res.send({ message: 'server err' })
+        })
+}
+
+
+module.exports.login = (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    Users.findOne({ username: username })
+        .then((result) => {
+            if (!result) {
+                res.send({ message: 'user not found.' })
+            } else {
+                if (result.password == password) {
+                    const token = jwt.sign({
+                        data: result
+                    }, 'MYKEY', { expiresIn: '1h' });
+                    res.send({ message: 'find success.', token: token, userId: result._id })
+                }
+                if (result.password != password) {
+                    res.send({ message: 'password wrong.' })
+                }
+
             }
-             else {
-                res.status(400).json({ error: "Invalid user data" });
-            }
-        }
-           
-    catch (error) {
-        console.log("Error in signup controller", error.message);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-};
 
-export const login = async (req, res) => {
-	try {
-		const { username, password } = req.body;
-		const user = await User.findOne({ username });
-		const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
+        })
+        .catch(() => {
+            res.send({ message: 'server err' })
+        })
 
-		if (!user || !isPasswordCorrect) {
-			return res.status(400).json({ error: "Invalid username or password" });
-		}
+}
 
-		generateTokenAndSetCookie(user._id, res);
+module.exports.likedProducts = (req, res) => {
 
-		res.status(200).json({
-			_id: user._id,
-			fullName: user.fullName,
-			username: user.username,
-		});
-	} catch (error) {
-		console.log("Error in login controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-};
+    Users.findOne({ _id: req.body.userId }).populate('likedProducts')
+        .then((result) => {
+            res.send({ message: 'success', products: result.likedProducts })
+        })
+        .catch((err) => {
+            res.send({ message: 'server err' })
+        })
 
-export const logout = (req, res) => {
-	try {
-		res.cookie("jwt", "", { maxAge: 0 });
-		res.status(200).json({ message: "Logged out successfully" });
-	} catch (error) {
-		console.log("Error in logout controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-};
+}
