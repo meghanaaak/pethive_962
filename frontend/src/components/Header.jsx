@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 function Header(props) {
 
-    const [loc, setLoc] = useState(null)
+    // const [loc, setLoc] = useState(null)
     const [showOver, setshowOver] = useState(false)
 
     const navigate = useNavigate()
@@ -17,25 +17,25 @@ function Header(props) {
         navigate('/login');
     }
 
-    let locations = [
-        {
-            "latitude": 28.6139,
-            "longitude": 77.2090,
-            "placeName": "New Delhi, Delhi"
-        },
-        {
-            "latitude": 19.0760,
-            "longitude": 72.8777,
-            "placeName": "Mumbai, Maharashtra"
-        },
-    ]
+    // let locations = [
+    //     {
+    //         "latitude": 28.6139,
+    //         "longitude": 77.2090,
+    //         "placeName": "New Delhi, Delhi"
+    //     },
+    //     {
+    //         "latitude": 19.0760,
+    //         "longitude": 72.8777,
+    //         "placeName": "Mumbai, Maharashtra"
+    //     },
+    // ]
 
     return (
         <div className='header-container d-flex justify-content-between'>
 
             <div className="header">
                 <Link className='links' to="/">  HOME </Link>
-                <select value={loc} onChange={(e) => {
+                {/* <select value={loc} onChange={(e) => {
                     localStorage.setItem('userLoc', e.target.value)
                     setLoc(e.target.value)
                 }} >
@@ -48,7 +48,7 @@ function Header(props) {
                             )
                         })
                     }
-                </select>
+                </select> */}
                 <input className='search'
                     type='text'
                     value={props && props.search}
@@ -132,3 +132,68 @@ function Header(props) {
 
 
 export default Header;
+// import { Link, useNavigate } from 'react-router-dom';
+// import './Header.css';
+// import { FaSearch } from "react-icons/fa";
+// import { useState } from 'react';
+// import axios from 'axios';
+
+// function Header(props) {
+//     const [searchTerm, setSearchTerm] = useState('');
+//     const [searchResults, setSearchResults] = useState([]);
+//     const navigate = useNavigate();
+
+//     const handleLogout = () => {
+//         localStorage.removeItem('token');
+//         localStorage.removeItem('userId');
+//         navigate('/login');
+//     };
+
+//     const handleSearch = async () => {
+//         try {
+//             const response = await axios.get(`/api/products?search=${searchTerm}`);
+//             setSearchResults(response.data.products);
+//         } catch (error) {
+//             console.error('Error fetching products:', error);
+//         }
+//     };
+
+//     return (
+//         <div className='header-container d-flex justify-content-between'>
+//             <div className="header">
+//                 <Link className='links' to="/">HOME</Link>
+//                 <input
+//                     className='search'
+//                     type='text'
+//                     placeholder='Search for a product'
+//                     value={searchTerm}
+//                     onChange={(e) => setSearchTerm(e.target.value)}
+//                 />
+//                 <button className='search-btn' onClick={handleSearch}><FaSearch /></button>
+//             </div>
+
+//             <div className="search-results">
+//                 {searchResults.length > 0 ? (
+//                     <div>
+//                         <h2>Search Results:</h2>
+//                         <ul>
+//                             {searchResults.map(product => (
+//                                 <li key={product.id}>
+//                                     <Link to={`/products/${product.id}`}>
+//                                         {product.name}
+//                                     </Link>
+//                                 </li>
+//                             ))}
+//                         </ul>
+//                     </div>
+//                 ) : (
+//                     <p>No products found.</p>
+//                 )}
+//             </div>
+
+//             {/* Your other header content here */}
+//         </div>
+//     );
+// }
+
+// export default Header;

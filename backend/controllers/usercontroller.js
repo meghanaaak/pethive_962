@@ -18,7 +18,7 @@ module.exports.likeProducts = (req, res) => {
             res.send({ message: 'liked success.' })
         })
         .catch(() => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err likeproducts backend' })
         })
 
 }
@@ -34,7 +34,7 @@ module.exports.signup = (req, res) => {
             res.send({ message: 'saved success.' })
         })
         .catch(() => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err signup backend' })
         })
 
 }
@@ -53,7 +53,7 @@ module.exports.myProfileById = (req, res) => {
             })
         })
         .catch(() => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err myprofile backend' })
         })
 
     return;
@@ -73,7 +73,7 @@ module.exports.getUserById = (req, res) => {
             })
         })
         .catch(() => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err get userbyid backend' })
         })
 }
 
@@ -101,7 +101,7 @@ module.exports.login = (req, res) => {
 
         })
         .catch(() => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err login backend' })
         })
 
 }
@@ -113,7 +113,7 @@ module.exports.likedProducts = (req, res) => {
             res.send({ message: 'success', products: result.likedProducts })
         })
         .catch((err) => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err likeddd products backedn' })
         })
 
 }

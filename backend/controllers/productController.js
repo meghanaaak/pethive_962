@@ -10,55 +10,72 @@ let schema = new mongoose.Schema({
     pimage: String,
     pimage2: String,
     addedBy: mongoose.Schema.Types.ObjectId,
-    pLoc: {
-        type: {
-            type: String,
-            enum: ['Point'],
-            default: 'Point'
-        },
-        coordinates: {
-            type: [Number]
-        }
-    }
+    // pLoc: {
+    //     type: {
+    //         type: String,
+    //         enum: ['Point'],
+    //         default: 'Point'
+    //     },
+    //     coordinates: {
+    //         type: [Number]
+    //     }
+    // }
 })
 
-schema.index({ pLoc: '2dsphere' });
+// schema.index({ pLoc: '2dsphere' });
 
 const Products = mongoose.model('Products', schema);
 
 
+// module.exports.search = (req, res) => {
+
+//     console.log(req.query)
+
+//     let latitude = req.query.loc.split(',')[0]
+//     let longitude = req.query.loc.split(',')[1]
+
+//     let search = req.query.search;
+//     Products.find({
+//         $or: [
+//             { pname: { $regex: search } },
+//             { pdesc: { $regex: search } },
+//             { price: { $regex: search } },
+//         ],
+//         pLoc: {
+//             $near: {
+//                 $geometry: {
+//                     type: 'Point',
+//                     coordinates: [parseFloat(latitude), parseFloat(longitude)]
+//                 },
+//                 $maxDistance: 500 * 1000,
+//             }
+
+//         }
+//     })
+//         .then((results) => {
+//             res.send({ message: 'success', products: results })
+//         })
+//         .catch((err) => {
+//             res.send({ message: 'server err' })
+//         })
+// }
 module.exports.search = (req, res) => {
+  let search = req.query.search;
 
-    console.log(req.query)
-
-    let latitude = req.query.loc.split(',')[0]
-    let longitude = req.query.loc.split(',')[1]
-
-    let search = req.query.search;
-    Products.find({
-        $or: [
-            { pname: { $regex: search } },
-            { pdesc: { $regex: search } },
-            { price: { $regex: search } },
-        ],
-        pLoc: {
-            $near: {
-                $geometry: {
-                    type: 'Point',
-                    coordinates: [parseFloat(latitude), parseFloat(longitude)]
-                },
-                $maxDistance: 500 * 1000,
-            }
-
-        }
-    })
-        .then((results) => {
-            res.send({ message: 'success', products: results })
-        })
-        .catch((err) => {
-            res.send({ message: 'server err' })
-        })
+  Products.find({
+      $or: [
+          { pname: { $regex: search, $options: 'i' } }, // Case-insensitive search by product name
+          { category: { $regex: search, $options: 'i' } } // Case-insensitive search by category
+      ]
+  })
+  .then((results) => {
+      res.send({ message: 'success', products: results })
+  })
+  .catch((err) => {
+      res.status(500).send({ message: 'server err searchbackend' })
+  })
 }
+
 
 module.exports.addProduct = (req, res) => {
 
@@ -66,8 +83,8 @@ module.exports.addProduct = (req, res) => {
     console.log(req.body);
 
 
-    const plat = req.body.plat;
-    const plong = req.body.plong;
+    // const plat = req.body.plat;
+    // const plong = req.body.plong;
     const pname = req.body.pname;
     const pdesc = req.body.pdesc;
     const price = req.body.price;
@@ -77,16 +94,17 @@ module.exports.addProduct = (req, res) => {
     const addedBy = req.body.userId;
 
     const product = new Products({
-        pname, pdesc, price, category, pimage, pimage2, addedBy, pLoc: {
-            type: 'Point', coordinates: [plat, plong]
-        }
+        pname, pdesc, price, category, pimage, pimage2, addedBy
+        // , pLoc: {
+        //     type: 'Point', coordinates: [plat, plong]
+        // }
     });
     product.save()
         .then(() => {
             res.send({ message: 'saved success.' })
         })
         .catch(() => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err from backend' })
         })
 }
 
@@ -106,7 +124,7 @@ module.exports.getProducts = (req, res) => {
 
         })
         .catch((err) => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err get products backend' })
         })
 
 }
@@ -119,7 +137,7 @@ module.exports.getProductsById = (req, res) => {
             res.send({ message: 'success', product: result })
         })
         .catch((err) => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err get productbyid backend' })
         })
 
 }
@@ -133,7 +151,7 @@ module.exports.myProducts = (req, res) => {
             res.send({ message: 'success', products: result })
         })
         .catch((err) => {
-            res.send({ message: 'server err' })
+            res.send({ message: 'server err my products backend' })
         })
 
 }

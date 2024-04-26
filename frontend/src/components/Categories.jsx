@@ -10,11 +10,11 @@ function Categories(props) {
     return (
         <div className='cat-container'>
             <div>
-                <span className='pr-3'>All Categories</span>
+                <span className='pr-3' style={{fontWeight:"bold", fontFamily:"Arial, sans-serif"}}>All Categories</span>
                 {categories && categories.length > 0 &&
                     categories.map((item, index) => {
                         return (
-                            <span onClick={() => navigate('/category/' + item)} key={index} className='category'> {item} </span>
+                            <span onClick={() => navigate('/category/' + item)} key={index} className='category' style={{fontWeight:"bold", fontFamily:"Arial, sans-serif"}}> {item} </span>
                         )
                     })}
             </div>
