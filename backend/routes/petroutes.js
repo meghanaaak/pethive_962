@@ -27,4 +27,17 @@ export default router;
 // Route for posting a pet, protected by requireLogin middleware
 
 
+// import express from 'express';
+// import { postPet, getAllPets } from '../controllers/petcontroller.js'; // Ensure getAllPets exists in your controller
+// import { authenticateUser, authorizeRoles } from '../middleware/authMiddleware.js'; // Import authentication and authorization middleware
+
+// const router = express.Router();
+
+// // Get all pets (open to all users)
+// router.get('/pets', getAllPets); // Public route
+
+// // Add a new pet (protected by authentication and role-based access)
+// router.post('/addpet', authenticateUser, authorizeRoles('Admin', 'User'), postPet);
+
+// export default router;
 

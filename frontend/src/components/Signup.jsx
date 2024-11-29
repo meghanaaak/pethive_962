@@ -5,12 +5,10 @@ import axios from "axios";
 import API_URL from "../constants";
 
 function Signup() {
-
-    const [username, setusername] = useState('');
-    const [password, setpassword] = useState('');
-    const [email, setemail] = useState('');
-    const [mobile, setmobile] = useState('');
-
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [mobile, setMobile] = useState('');
 
     const handleApi = () => {
         const url = API_URL + '/signup';
@@ -23,43 +21,186 @@ function Signup() {
             })
             .catch((err) => {
                 alert('SERVER ERR')
-            })
+            });
     }
+
     return (
-        <div>
+        <div style={{ fontFamily: "Arial, sans-serif" }}>
             <Header />
-            <div className="p-3 m-3">
-                <h3> Welcome to Signup Page </h3>
-                <br></br>
-                USERNAME
-                <input className="form-control" type="text" value={username}
-                    onChange={(e) => {
-                        setusername(e.target.value)
-                    }} />
-                <br></br>
-                MOBILE
-                <input className="form-control" type="text" value={mobile}
-                    onChange={(e) => {
-                        setmobile(e.target.value)
-                    }} />
-                <br></br>
-                EMAIL
-                <input className="form-control" type="text" value={email}
-                    onChange={(e) => {
-                        setemail(e.target.value)
-                    }} />
-                <br></br>
-                PASSWORD
-                <input className="form-control" type="text" value={password}
-                    onChange={(e) => {
-                        setpassword(e.target.value)
-                    }} />
-                <br></br>
-                <button className="btn btn-primary mr-3" onClick={handleApi}> SIGNUP </button>
-                <Link className="m-3" to="/login">  LOGIN </Link>
+            <div style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                <div style={{ width: "400px" }}>
+                    <h3 style={{ textAlign: "center", marginBottom: "20px", color: "#343a40" }}>Signup</h3>
+                    <form>
+                        <div style={{ marginBottom: "15px" }}>
+                            <label style={{ marginRight: "10px", color: "#343a40" }}>Username</label>
+                            <input
+                                style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+                        <div style={{ marginBottom: "15px" }}>
+                            <label style={{ marginRight: "10px", color: "#343a40" }}>Mobile</label>
+                            <input
+                                style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+                                type="text"
+                                value={mobile}
+                                onChange={(e) => setMobile(e.target.value)}
+                            />
+                        </div>
+                        <div style={{ marginBottom: "15px" }}>
+                            <label style={{ marginRight: "10px", color: "#343a40" }}>Email</label>
+                            <input
+                                style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <div style={{ marginBottom: "15px" }}>
+                            <label style={{ marginRight: "10px", color: "#343a40" }}>Password</label>
+                            <input
+                                style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                        <div style={{ textAlign: "center" }}>
+                            <button
+                                style={{ backgroundColor: "#002f34", color: "#fff", padding: "10px 20px", borderRadius: "5px", border: "none", marginRight: "10px" }}
+                                onClick={handleApi}
+                            >
+                                SignUp
+                            </button>
+                            <Link
+                                style={{ backgroundColor: "#002f34", color: "#fff", padding: "10px 20px", borderRadius: "5px", border: "none", textDecoration: "none" }}
+                                to="/login"
+                            >
+                                Login
+                            </Link>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     )
 }
 
 export default Signup;
+// import { Link, useNavigate } from "react-router-dom";
+// import { useState } from "react";
+// import axios from "axios";
+// import API_URL from "../constants";
+// import Header from "./Header";
+
+// function Signup() {
+//     const navigate = useNavigate();
+
+//     const [username, setUsername] = useState('');
+//     const [password, setPassword] = useState('');
+//     const [email, setEmail] = useState('');
+//     const [mobile, setMobile] = useState('');
+//     const [error, setError] = useState('');
+
+//     const handleApi = () => {
+//         const url = API_URL + '/signup';
+//         const data = { username, password, mobile, email };
+        
+//         axios.post(url, data)
+//             .then((res) => {
+//                 if (res.data.message) {
+//                     alert(res.data.message);  // Display success message
+
+//                     // Assuming the backend returns role with the response
+//                     const role = res.data.role;
+                    
+//                     // Store the token, userId, and role in localStorage
+//                     localStorage.setItem('token', res.data.token);
+//                     localStorage.setItem('userId', res.data.userId);
+//                     localStorage.setItem('role', role);  // Save role in localStorage
+
+//                     // Redirect based on the role
+//                     if (role === 'Admin') {
+//                         navigate('/admin-dashboard');  // Redirect to Admin Dashboard
+//                     } else if (role === 'Moderator') {
+//                         navigate('/moderator-dashboard');  // Redirect to Moderator Dashboard
+//                     } else {
+//                         navigate('/');  // Redirect to Home for regular users
+//                     }
+//                 }
+//             })
+//             .catch((err) => {
+//                 console.error('Signup Error:', err);
+//                 setError('Something went wrong during signup. Please try again.');
+//             });
+//     }
+
+//     return (
+//         <div style={{ fontFamily: "Arial, sans-serif" }}>
+//             <Header />
+//             <div style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
+//                 <div style={{ width: "400px" }}>
+//                     <h3 style={{ textAlign: "center", marginBottom: "20px", color: "#343a40" }}>Signup</h3>
+//                     {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
+//                     <form>
+//                         <div style={{ marginBottom: "15px" }}>
+//                             <label style={{ marginRight: "10px", color: "#343a40" }}>Username</label>
+//                             <input
+//                                 style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+//                                 type="text"
+//                                 value={username}
+//                                 onChange={(e) => setUsername(e.target.value)}
+//                             />
+//                         </div>
+//                         <div style={{ marginBottom: "15px" }}>
+//                             <label style={{ marginRight: "10px", color: "#343a40" }}>Mobile</label>
+//                             <input
+//                                 style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+//                                 type="text"
+//                                 value={mobile}
+//                                 onChange={(e) => setMobile(e.target.value)}
+//                             />
+//                         </div>
+//                         <div style={{ marginBottom: "15px" }}>
+//                             <label style={{ marginRight: "10px", color: "#343a40" }}>Email</label>
+//                             <input
+//                                 style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+//                                 type="email"
+//                                 value={email}
+//                                 onChange={(e) => setEmail(e.target.value)}
+//                             />
+//                         </div>
+//                         <div style={{ marginBottom: "15px" }}>
+//                             <label style={{ marginRight: "10px", color: "#343a40" }}>Password</label>
+//                             <input
+//                                 style={{ width: "100%", padding: "8px", borderRadius: "5px", border: "1px solid #6c757d" }}
+//                                 type="password"
+//                                 value={password}
+//                                 onChange={(e) => setPassword(e.target.value)}
+//                             />
+//                         </div>
+//                         <div style={{ textAlign: "center" }}>
+//                             <button
+//                                 type="button"  // Changed to type="button" to prevent form submit from refreshing the page
+//                                 style={{ backgroundColor: "#002f34", color: "#fff", padding: "10px 20px", borderRadius: "5px", border: "none", marginRight: "10px" }}
+//                                 onClick={handleApi}
+//                             >
+//                                 SignUp
+//                             </button>
+//                             <Link
+//                                 style={{ backgroundColor: "#002f34", color: "#fff", padding: "10px 20px", borderRadius: "5px", border: "none", textDecoration: "none" }}
+//                                 to="/login"
+//                             >
+//                                 Login
+//                             </Link>
+//                         </div>
+//                     </form>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// }
+
+// export default Signup;

@@ -1,7 +1,7 @@
 // user.controller.js
 import express from 'express'
 // import User from '../model/usermodel.js'
-import  {signup,login,logout}  from '../controllers/usercontroller.js';
+import  {signup,login,logout}  from '../controllers/userController.js';
 
 const router = express.Router()
 
@@ -14,3 +14,7 @@ router.get("/login",(req,res) => {
 })
 
 export default router;
+
+
+
+

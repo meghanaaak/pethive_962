@@ -1,11 +1,16 @@
+
 const express = require('express')
 const cors = require('cors')
 const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
 var jwt = require('jsonwebtoken');
 const multer = require('multer')
 const productController = require('./controllers/productController');
 const userController = require('./controllers/userController');
 
+
+// const authMiddleware = require('./middleware/authMiddleware')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads')
@@ -26,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 const port = 4000
 const mongoose = require('mongoose');
+const authMiddleware = require('./middleware/authMiddleware');
 mongoose.connect('mongodb+srv://kankipatimeghana23:J2GW4y5AjZzTbPec@honey.npcxccq.mongodb.net/Pet?retryWrites=true&w=majority&appName=Honey')
 
 app.get('/', (req, res) => {
@@ -40,7 +46,7 @@ app.get('/get-product/:pId', productController.getProductsById)
 app.post('/liked-products', userController.likedProducts)
 app.post('/my-products', productController.myProducts)
 app.post('/signup', userController.signup)
-app.get('/my-profile/:userId', userController.myProfileById)
+app.get('/my-profile/:userId',authMiddleware, userController.myProfileById)
 app.get('/get-user/:uId', userController.getUserById)
 app.post('/login', userController.login)
 
